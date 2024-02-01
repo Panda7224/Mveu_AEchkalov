@@ -1,0 +1,11 @@
+.Account {
+    width: 100%;
+    min-height: calc(100vh - 50px - 50px);
+    background-color: #ffffff;
+        
+}
+
+.Account h1 {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
