@@ -14,9 +14,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const generateAccessToken = (id) => {
+const generateAccessToken = (id, login) => {
     const payload = {
-        id
+        id, login
     }
     return jwt.sign(payload, secret, {expiresIn: '24h'})
 }
@@ -41,7 +41,7 @@ app.post('/login', async (req, res) => {
     if (user.password !== password){
         return res.status(400).json({message: 'Неверный логин или пароль!'})
     }
-    const token = generateAccessToken(user._id)
+    const token = generateAccessToken(user._id, user.login)
     res.json({
         message: 'Вы успешно авторизовались!',
         token: token
@@ -57,12 +57,14 @@ app.get('/products', async (req, res) => {
     })
 })
 
-app.get('/users', async (req, res) => {
-
-    const users = await User.find() 
+app.post('/user/find', async (req, res) => {
+    console.log(req.body)
+    const {id} = req.body
+    const user = await User.findOne({_id: id}) 
 
     res.json({
-        data: users
+        email: user.email,
+        password: user.password
     })
 })
 
